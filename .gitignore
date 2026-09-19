@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.local/
+artifacts/
+*.tsbuildinfo
+.env*
+!.env.example
+.DS_Store
+__pycache__/
+supabase/.temp/
+supabase/.branches/
+coverage/
+playwright-output/

@@ -1,0 +1,53 @@
+{
+  "name": "converge-planner",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node --import tsx scripts/serve.ts --demo --dev",
+    "build": "next build",
+    "start": "node --import tsx scripts/serve.ts",
+    "test": "vitest run",
+    "demo": "node --import tsx scripts/serve.ts --demo",
+    "typecheck": "tsc --noEmit",
+    "setup": "node --import tsx scripts/setup.ts",
+    "storage": "node --import tsx scripts/storage.ts"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@google/genai": "^2.22.0",
+    "@js-temporal/polyfill": "^0.5.1",
+    "@next/env": "16.3.5",
+    "@supabase/supabase-js": "^2.110.2",
+    "googleapis": "^180.0.0",
+    "next": "^16.3.5",
+    "next-auth": "^4.24.0",
+    "nodemailer": "^10.0.9",
+    "postgres": "3.4.9",
+    "proper-lockfile": "4.1.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tsx": "4.23.13"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20.14.0",
+    "@types/nodemailer": "^7.0.11",
+    "@types/proper-lockfile": "4.1.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "jsdom": "^29.1.1",
+    "typescript": "^5.5.0",
+    "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "next-auth": {
+      "nodemailer": "$nodemailer"
+    },
+    "esbuild": "0.28.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "license": "MIT"
+}

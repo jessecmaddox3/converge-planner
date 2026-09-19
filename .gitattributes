@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.png -text
+public/fonts/** -text -whitespace
+licenses/** -text -whitespace

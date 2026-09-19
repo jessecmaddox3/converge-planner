@@ -1,0 +1,131 @@
+name: Verify
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  application:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            node: 22
+          - os: ubuntu-latest
+            node: 24
+          - os: macos-latest
+            node: 24
+          - os: windows-latest
+            node: 22
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+        env:
+          NODE_OPTIONS: --require ./scripts/block-outbound.cjs
+      - run: npm run typecheck
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - run: git diff --check
+  launchers:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/build-release.py
+      - run: python scripts/check-launchers.py
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - run: pip install playwright==1.55.0
+      - run: python -m playwright install --with-deps chromium
+      - name: Exercise the offline demo
+        shell: bash
+        run: |
+          CONVERGE_MODE=demo CONVERGE_DATA_DIR="$RUNNER_TEMP/converge-demo" PORT=5075 GOOGLE_CLIENT_ID=fictional GOOGLE_CLIENT_SECRET=fictional SUPABASE_URL=https://fictional.invalid SUPABASE_SERVICE_ROLE_KEY=fictional GEMINI_API_KEY=fictional CONVERGE_ENABLE_AI=yes SMTP_HOST=fictional.invalid CONVERGE_MAIL_FROM=fictional@example.invalid NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS='--require ./scripts/block-outbound.cjs' node --import tsx scripts/serve.ts > "$RUNNER_TEMP/converge-server.log" 2>&1 &
+          server=$!
+          trap 'kill -TERM "$server" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:5075/demo >/dev/null; then break; fi
+            sleep 1
+          done
+          python scripts/test-browser.py
+          if grep -q CONVERGE_TEST_OUTBOUND_DENIED "$RUNNER_TEMP/converge-server.log"; then cat "$RUNNER_TEMP/converge-server.log"; exit 1; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: artifacts/browser/
+  database:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: contract-test-only
+          POSTGRES_DB: converge_test
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+      - run: bash tools/test-database.sh
+        env:
+          PGHOST: 127.0.0.1
+          PGPORT: 55432
+          PGUSER: postgres
+          PGPASSWORD: contract-test-only
+          PGDATABASE: converge_test
+      - run: python3 scripts/fetch-postgrest.py
+      - name: Test the hosted API on a fresh database
+        env:
+          PGHOST: 127.0.0.1
+          PGPORT: 55432
+          PGUSER: postgres
+          PGPASSWORD: contract-test-only
+          CONVERGE_TEST_DATABASE_URL: postgresql://postgres:contract-test-only@127.0.0.1:55432/converge_contract_api
+          CONVERGE_TEST_POSTGREST: ./artifacts/postgrest/postgrest
+        run: |
+          createdb converge_contract_api
+          node --import tsx scripts/test-production.ts

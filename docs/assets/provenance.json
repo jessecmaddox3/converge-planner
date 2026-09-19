@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "path": "converge-hero.png",
+      "sha256": "1779391b5a1d5995883b24de8ede5a811ca704595b7dfeb65c35b8bc5081abf6",
+      "origin": "Generated with the ChatGPT image generation tool on 2026-09-19. Wholly invented illustration; no reference photos or personal inputs.",
+      "prompt": "Wide editorial illustration for Converge, an open-source group trip scheduling app. Warm cream paper, forest green and sage; overlapping calendar sheets converge toward an invented outdoor picnic with a telescope and sketchbook. Title: Converge. Tagline: Good trips start with a date. Labels: Find dates, Compare availability, Make a plan. No personal people, dates, addresses, booking details, testimonials or pricing.",
+      "modified": false
+    },
+    {
+      "path": "public/fonts/Fraunces.ttf",
+      "upstream": "https://raw.githubusercontent.com/google/fonts/f2bd09badbc763d8757951d52deec29da27e85fb/ofl/fraunces/Fraunces%5BSOFT%2CWONK%2Copsz%2Cwght%5D.ttf",
+      "upstreamCommit": "f2bd09badbc763d8757951d52deec29da27e85fb",
+      "sha256": "177ff6c0f14e5550a3c624247cd1189611d4eb65d000b14944c63d967958abbb",
+      "license": "SIL Open Font License 1.1",
+      "modified": false
+    },
+    {
+      "path": "public/fonts/Fraunces-OFL.txt",
+      "upstream": "https://raw.githubusercontent.com/google/fonts/f2bd09badbc763d8757951d52deec29da27e85fb/ofl/fraunces/OFL.txt",
+      "upstreamCommit": "f2bd09badbc763d8757951d52deec29da27e85fb",
+      "sha256": "bdf4c22802eaf804f998195871c6b8938aac2ac14b2d78a8bd66a6f1eced833b",
+      "license": "SIL Open Font License 1.1",
+      "modified": false
+    },
+    {
+      "path": "public/fonts/PlusJakartaSans-OFL.txt",
+      "upstream": "https://raw.githubusercontent.com/google/fonts/f2bd09badbc763d8757951d52deec29da27e85fb/ofl/plusjakartasans/OFL.txt",
+      "upstreamCommit": "f2bd09badbc763d8757951d52deec29da27e85fb",
+      "sha256": "995c7199cab65954f545996326755daee7b63cc6b42b06c13da1f9502ab08a99",
+      "license": "SIL Open Font License 1.1",
+      "modified": false
+    },
+    {
+      "path": "public/fonts/PlusJakartaSans.ttf",
+      "upstream": "https://raw.githubusercontent.com/google/fonts/f2bd09badbc763d8757951d52deec29da27e85fb/ofl/plusjakartasans/PlusJakartaSans%5Bwght%5D.ttf",
+      "upstreamCommit": "f2bd09badbc763d8757951d52deec29da27e85fb",
+      "sha256": "89b3fb38aa0d275d7a731d0d817a4f1622b316b4d7fbdedcf02ee9099ff68bc8",
+      "license": "SIL Open Font License 1.1",
+      "modified": false
+    }
+  ]
+}
