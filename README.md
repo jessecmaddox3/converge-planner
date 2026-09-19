@@ -59,6 +59,8 @@ The full Next.js/React app is included, alongside its scheduling engine, SQL mig
 
 [Architecture and design choices](docs/ARCHITECTURE.md) · [Development and verification](docs/DEVELOPMENT.md) · [Backup and upgrade](docs/BACKUPS.md)
 
+Using an AI assistant? Ask it to read the included [trip-planning skill](skills/plan-converge-trip/SKILL.md). It explains the setup, planning workflow and design constraints so you can build on the project without rediscovering them.
+
 Converge proposes dates. It does not book travel, check guests into an event or write directly to Google Calendar. Import the downloaded calendar file yourself. Calendar inference and optional AI grouping can be wrong; review the underlying events. Email has an at-least-once delivery contract, so a retry after an ambiguous provider failure can produce a duplicate.
 
 ## Make it yours

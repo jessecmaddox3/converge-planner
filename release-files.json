@@ -254,6 +254,7 @@
   "scripts/storage.ts",
   "scripts/test-browser.py",
   "scripts/test-production.ts",
+  "skills/plan-converge-trip/SKILL.md",
   "src/app/api/analyze/route.test.ts",
   "src/app/api/analyze/route.ts",
   "src/app/api/auth/[...nextauth]/route.ts",
